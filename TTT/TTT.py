@@ -1,23 +1,7 @@
 
 from __future__ import print_function
-import httplib2
-import os
-
-from apiclient import discovery
-from oauth2client import client
-from oauth2client import tools
-from oauth2client.file import Storage
-
-import datetime
-from dateutil.parser import parse
-
 import gevent
-
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
+import datetime
 
 def main():
     """Shows basic usage of the Google Calendar API.
@@ -26,9 +10,13 @@ def main():
     10 events on the user's calendar.
     """
 
-    #cred = gcred.GCredentials();
-    #credentials = cred.get_credentials()
     evt = gevent.Event()
+
+    start = datetime.datetime(2018, 3, 3, 13, 0, 0)
+    end = datetime.datetime(2018, 3, 3, 18, 0, 0)
+    det = {'summary' : 'prova1'}
+    evt.set_event(start, end, summary='prova1')
+
     evt.get_events()
 
     #page_token = None

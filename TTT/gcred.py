@@ -1,5 +1,4 @@
 from __future__ import print_function
-import httplib2
 import os
 
 from apiclient import discovery
@@ -7,11 +6,18 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
+
 class GCredentials(object):
     """Get Google app credentials"""
     # If modifying these scopes, delete your previously saved credentials
     # at ~/.credentials/calendar-python-quickstart.json
-    SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
+ 
+    SCOPES = 'https://www.googleapis.com/auth/calendar'
     CLIENT_SECRET_FILE = 'client_secret.json'
     APPLICATION_NAME = 'Google Calendar API Python Quickstart'
 
@@ -37,8 +43,8 @@ class GCredentials(object):
         store = Storage(credential_path)
         credentials = store.get()
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-            flow.user_agent = APPLICATION_NAME
+            flow = client.flow_from_clientsecrets(self.CLIENT_SECRET_FILE, self.SCOPES)
+            flow.user_agent = self.APPLICATION_NAME
             if flags:
                 credentials = tools.run_flow(flow, store, flags)
             else: # Needed only for compatibility with Python 2.6
