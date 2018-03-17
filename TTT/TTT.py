@@ -2,6 +2,7 @@
 from __future__ import print_function
 import gevent
 import datetime
+import importCsv
 
 def main():
     """Shows basic usage of the Google Calendar API.
@@ -11,13 +12,22 @@ def main():
     """
 
     evt = gevent.Event()
+    
+    #Insert new event
+    #start = datetime.datetime(2018, 3, 3, 13, 0, 0)
+    #end = datetime.datetime(2018, 3, 3, 18, 0, 0)
+    #det = {'summary' : 'prova1'}
+    #evt.set_event(start, end, summary='prova1')
 
-    start = datetime.datetime(2018, 3, 3, 13, 0, 0)
-    end = datetime.datetime(2018, 3, 3, 18, 0, 0)
-    det = {'summary' : 'prova1'}
-    evt.set_event(start, end, summary='prova1')
+    #Import time track from csv timesheet e create related Events
+    #imp = importCsv.ImportCsv()
+    #imp.importData()
 
-    evt.get_events()
+    #get Events
+    events = evt.get_events(month=2)
+    evt.print_events(events)
+    print ('---------------')
+    evt.get_totHoursEvent(2)
 
     #page_token = None
     #while True:

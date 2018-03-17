@@ -28,6 +28,9 @@
     <Compile Include="gevent.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="importCsv.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="serialize.py">
       <SubType>Code</SubType>
     </Compile>
