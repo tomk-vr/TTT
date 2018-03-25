@@ -6,28 +6,31 @@ import importCsv
 
 def main():
     """Shows basic usage of the Google Calendar API.
-
-    Creates a Google Calendar API service object and outputs a list of the next
-    10 events on the user's calendar.
+       Creates a Google Calendar API service object.
     """
 
     evt = gevent.Event()
     
-    #Insert new event
+    ### Insert new event
     #start = datetime.datetime(2018, 3, 3, 13, 0, 0)
     #end = datetime.datetime(2018, 3, 3, 18, 0, 0)
     #det = {'summary' : 'prova1'}
     #evt.set_event(start, end, summary='prova1')
 
-    #Import time track from csv timesheet e create related Events
+    ### Import time track from csv timesheet e create related Events
     #imp = importCsv.ImportCsv()
     #imp.importData()
 
-    #get Events
-    events = evt.get_events(month=2)
-    evt.print_events(events)
-    print ('---------------')
-    evt.get_totHoursEvent(2)
+    ### get Events
+    #events = evt.get_events(month=2)
+    #evt.print_events(events)
+    #print ('---------------')
+    
+    ### get HOURS MONTH
+    evt.set_totHoursEvent(1)
+    
+    ### set HOURS MONTH
+    #evt.get_totHoursEvent(1)
 
     #page_token = None
     #while True:
