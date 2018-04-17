@@ -28,6 +28,9 @@
     <Compile Include="gevent.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gsheet.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="importCsv.py">
       <SubType>Code</SubType>
     </Compile>
@@ -38,6 +41,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TTT.py" />
+    <Compile Include="tttEvent.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

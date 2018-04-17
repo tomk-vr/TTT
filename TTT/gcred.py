@@ -17,13 +17,24 @@ class GCredentials(object):
     # If modifying these scopes, delete your previously saved credentials
     # at ~/.credentials/calendar-python-quickstart.json
  
-    SCOPES = 'https://www.googleapis.com/auth/calendar'
-    CLIENT_SECRET_FILE = 'client_secret.json'
+    #SCOPES = 'https://www.googleapis.com/auth/calendar'
+    SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
+    #CRED_FILENAME = 'calendar-python-quickstart.json'
+    CRED_FILENAME = 'sheets.googleapis.com-python-quickstart.json'
+    #CLIENT_SECRET_FILE = 'client_secret.json'
+    CLIENT_SECRET_FILE = 'sheet_client_secret.json'
     APPLICATION_NAME = 'Google Calendar API Python Quickstart'
 
     def __init__(self, **kwargs):
+        if 'scope' in kwargs:
+            self.SCOPES = kwargs['scope']
+        if 'cfname' in kwargs:
+            self.CRED_FILENAME = kwargs['cfname']
+        if 'sfname' in kwargs:
+            self.CLIENT_SECRET_FILE = kwargs['sfname']
+
         self.credentials = self.get_credentials();
-        return super().__init__(**kwargs)
+        return super().__init__()
 
     def get_credentials(self):
         """Gets valid user credentials from storage.
@@ -38,7 +49,7 @@ class GCredentials(object):
         credential_dir = os.path.join(home_dir, '.credentials')
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
-        credential_path = os.path.join(credential_dir, 'calendar-python-quickstart.json')
+        credential_path = os.path.join(credential_dir, self.CRED_FILENAME)
     
         store = Storage(credential_path)
         credentials = store.get()

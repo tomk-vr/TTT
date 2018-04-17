@@ -1,16 +1,25 @@
 
 from __future__ import print_function
-import gevent
+import tttEvent
 import datetime
 import importCsv
+import gsheet
 
 def main():
     """Shows basic usage of the Google Calendar API.
        Creates a Google Calendar API service object.
     """
 
-    evt = gevent.Event()
-    
+    #LOGGING best practice
+    #https://fangpenlin.com/posts/2012/08/26/good-logging-practice-in-python/
+
+
+    evt = tttEvent.TTTEvent(scope='https://www.googleapis.com/auth/calendar',
+                            cfname='calendar-python-quickstart.json',
+                            sfname='client_secret.json')
+    sht = gsheet.Sheet()
+
+    ### Print range sheet
     ### Insert new event
     #start = datetime.datetime(2018, 3, 3, 13, 0, 0)
     #end = datetime.datetime(2018, 3, 3, 18, 0, 0)
@@ -27,10 +36,14 @@ def main():
     #print ('---------------')
     
     ### get HOURS MONTH
-    evt.set_totHoursEvent(1)
-    
+    tot = float(evt.get_totHoursEvent(2))
+    sht.update_sheet('Ore', '2018', 2, [tot])
+
     ### set HOURS MONTH
     #evt.get_totHoursEvent(1)
+
+    ### set IN
+    #evt.get_totHoursEvent(2)
 
     #page_token = None
     #while True:
