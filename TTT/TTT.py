@@ -4,6 +4,7 @@ import tttEvent
 import datetime
 import importCsv
 import gsheet
+import pdfWriter
 
 def main():
     """Shows basic usage of the Google Calendar API.
@@ -17,7 +18,7 @@ def main():
     evt = tttEvent.TTTEvent(scope='https://www.googleapis.com/auth/calendar',
                             cfname='calendar-python-quickstart.json',
                             sfname='client_secret.json')
-    sht = gsheet.Sheet()
+    #sht = gsheet.Sheet()
 
     ### Print range sheet
     ### Insert new event
@@ -31,13 +32,15 @@ def main():
     #imp.importData()
 
     ### get Events
-    #events = evt.get_events(month=2)
-    #evt.print_events(events)
-    #print ('---------------')
+    events = evt.get_events(month=2)
+    ret = evt.get_data(events)
+    print ('---------------')
     
     ### get HOURS MONTH
-    tot = float(evt.get_totHoursEvent(2))
-    sht.update_sheet('Ore', '2018', 2, [tot])
+    #tot = float(evt.get_totHoursEvent(2))
+
+    ### upadate gsheet
+    #sht.update_sheet('Ore', '2018', 2, [tot])
 
     ### set HOURS MONTH
     #evt.get_totHoursEvent(1)
@@ -53,6 +56,11 @@ def main():
     #  page_token = calendar_list.get('nextPageToken')
     #  if not page_token:
     #    break
+
+    ### pdfWriter
+    pdfw = pdfWriter.pdfWriter(r"c:\temp\test_report_lab.pdf")
+    ret['pevts'].insert(0,['G', 'entrata', 'uscita', 'entrata', 'uscita', 'Pres'])
+    pdfw.write_table(ret['pevts'])
 
 if __name__ == '__main__':
     main()
