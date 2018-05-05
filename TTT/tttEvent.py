@@ -88,10 +88,10 @@ class TTTEvent(gevent.Event):
         end = datetime.datetime(year, month, calendar.monthrange(year, month)[1], 23, 59, 59)
         events = self.get_events(start=start, end=end)
         ret = self.get_data(events)
-        print("HOURS MONTH %.2f" % (ret['tothours']))
+        print("HOURS MONTH %.2f" % (ret['totHours']))
         start = end.replace(hour=23, minute=0, second=0)
         end = end.replace(hour=23, minute=30, second=0)
-        self.set_event(start, end, summary='ORE MESE', description=ret['tothours'])
+        self.set_event(start, end, summary='ORE MESE', description=ret['totHours'])
  
     def print_events(self, events):
         if not events:  
@@ -100,38 +100,80 @@ class TTTEvent(gevent.Event):
         ret = self.get_data(events)
 
         for pevt in ret['pevts']:
-            print('{}: IN {}  OUT {} - IN {}  OUT{}  TOT: {}'.format(pevt[0], pevt[1], pevt[2], pevt[3], pevt[4], pevt[5]))
+            print('{}: IN {}  OUT {} - IN {}  OUT {}  TOT: {}'.format(pevt[0], pevt[6], pevt[7], pevt[8], pevt[9], pevt[1]))
 
         print()
-        print("HOURS MONTH %.2f" % (ret['tothours']))
+        print("HOURS MONTH %.2f" % (ret['totHours']))
+        return ret
 
     def get_data (self, events):
         if not events:
             print('No upcoming events found.')
 
-        pevents = []
+        retevts = []
+        pevents = {}
         evt = []
         prevdt = ''
         hday = 0.0
         hours = 0.0
+        permHours = 0.0
+        month = 0
+        year = 0
         for event in events:
             if event['summary'] == "ORE MESE":
                 continue
             startdt = parse(event['start']['dateTime'])
             enddt = parse(event['end']['dateTime'])
             span = enddt - startdt
-            hday += span.total_seconds()
+            month = startdt.month
+            year = startdt.year
             if startdt.strftime("%d/%m/%Y") == prevdt:
+                hday += span.total_seconds()
                 hh = hday/3600
                 hm = math.floor(hh*4)/4
                 hours += hm
-                evt.extend([startdt.strftime("%H:%M"), enddt.strftime("%H:%M"), str(hm)])
-                pevents.append(evt)
+                evt[1] = str(hm)
+                if hm - 8 < 0:
+                    evt[2] = 8 - hm
+                    permHours += 8 - hm
+                evt.extend([startdt.strftime("%H:%M"), enddt.strftime("%H:%M")])
+                pevents[startdt.day] = evt
                 hday = 0.0
-            else: 
+            else:
+                if hday != 0.0:
+                    hours += hm
+                    pevents[startdt.day] = evt
+                    if hm - 8 < 0:
+                        evt[2] = 8 - hm
+                        permHours += 8 - hm
+                
+                hday = span.total_seconds()
+                hh = hday/3600
+                hm = math.floor(hh*4)/4
                 prevdt = startdt.strftime("%d/%m/%Y")
-                evt = [startdt.strftime("%d/%m/%Y"), startdt.strftime("%H:%M"), enddt.strftime("%H:%M")]
+                #startdt.strftime("%d/%m/%Y")
+                evt = [startdt.day, str(hm), '', '', '', '', startdt.strftime("%H:%M"), enddt.strftime("%H:%M")]
 
-        ret = { 'pevts': pevents, 'tothours': hours }
+
+        hols = {}
+        holidays = self.get_holidays(year, month)
+        for hol in holidays:
+            holiday = parse(hol['start']['date'])
+            if holiday.month == month:
+                hols[hol.day] = hol 
+
+        for dd in range(1, calendar.monthrange(year, month)[1]+1):
+            if dd in pevents:
+                retevts.append(pevents[dd])
+            else:
+                today = datetime.datetime(year, month, dd)
+                if today.weekday() > 4 or today.day in hols:
+                    #Saturday or Sunday
+                    retevts.append([dd, '', '', '', '', '', '', '', '', ''])
+                else:
+                    retevts.append([dd, '', '8', '', '', '', '', '', '', ''])
+                    permHours += 8
+
+        ret = { 'pevts': retevts, 'totHours': hours, 'permHours' : permHours }
         return ret
         #ARROTONDA.DIFETTO(( (ORARIO(ORA(C23);MINUTO(C23);SECONDO(C23)) - ORARIO(ORA(B23);MINUTO(B23);SECONDO(B23)) )+ (ORARIO(ORA(E23);MINUTO(E23);SECONDO(E23)) - ORARIO(ORA(D23);MINUTO(D23);SECONDO(D23)))) * 24; 0,25)

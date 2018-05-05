@@ -93,3 +93,13 @@ class Event(gcred.GCredentials):
             span = enddt - startdt
             print(startdt.strftime("%d/%m/%Y"))
             print('{}:  IN {}    OUT {}     TOT:{}'.format(event['summary'], startdt.strftime("%H:%M:%S"), enddt.strftime("%H:%M:%S"), span))
+
+    def get_holidays(self, year, month):
+        start = datetime.datetime(year, month, 1)
+        end = datetime.datetime(year, month, calendar.monthrange(year, month)[1], 12, 0, 0)
+        eventsResult = self.service.events().list(
+            calendarId='it.italian#holiday@group.v.calendar.google.com', timeMin=start.isoformat() + 'Z', timeMax=end.isoformat() + 'Z', 
+            maxResults=80, singleEvents=True,
+            orderBy='startTime').execute()
+        holidays = eventsResult.get('items', [])
+        return holidays
