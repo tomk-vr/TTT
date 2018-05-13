@@ -72,7 +72,7 @@ def main():
     pdfw.write_header(' ')
     pdfw.write_header(' ')
     pdfw.write_header(' ')
-    pdfw.write_header('Auto: propia = P ; non propia = NP ', 'Normal')
+    pdfw.write_header('Auto: propia = P ; non propia = NP', 'Normal')
     pdfw.write_header(' ')
     pdfw.write_header(' ')
     ret['pevts'].insert(0,['G', 'Pres', 'Perm', 'Trasferta', 'Auto', 'Pernotto', 'Entrata', 'Uscita', 'Entrata', 'Uscita'])

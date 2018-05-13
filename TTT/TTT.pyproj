@@ -5,13 +5,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7ce68fd3-75b7-45a9-851e-fac61c908bce</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>TTT.py</StartupFile>
+    <StartupFile>tttPrompt.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>TTT</Name>
     <RootNamespace>TTT</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,6 +46,9 @@
     </Compile>
     <Compile Include="TTT.py" />
     <Compile Include="tttEvent.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tttPrompt.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -1,7 +1,7 @@
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, portrait
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 class pdfWriter(object):
     """description of class"""
@@ -21,7 +21,7 @@ class pdfWriter(object):
         self.doc = SimpleDocTemplate(fpath, **kwargs)
         self.doc.pagesize = portrait(A4)
 
-    def write_header(self, textTitle, styleStr=''):
+    def write_header(self, textTitle, styleStr='', firstLineIndent=57):
     #        styles['title'] = ParagraphStyle(
     #    'title',
     #    parent=styles['default'],
@@ -34,7 +34,7 @@ class pdfWriter(object):
         if styleStr == '':
             styleStr = 'Heading1'
 
-        styles = getSampleStyleSheet()        style = styles[styleStr]        ph = Paragraph(textTitle, style);
+        styles = getSampleStyleSheet()        style = styles[styleStr]        style_right = ParagraphStyle(name='li', parent=style, firstLineIndent=firstLineIndent)        ph = Paragraph(textTitle, style_right);
         self.elements.append(ph)
 
     def write_table(self, data):

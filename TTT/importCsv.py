@@ -2,15 +2,21 @@ import csv
 import time
 import datetime
 import locale
-import gevent
+import tttEvent
 
 class ImportCsv(object):
     """Import csv timesheet and create an 2 events foreach row"""
-    def importData(self):
+    def importData(self, path=''):
         locale.setlocale(locale.LC_TIME, "it")
-        evt = gevent.Event()
+        evt = tttEvent.TTTEvent(scope='https://www.googleapis.com/auth/calendar',
+                        cfname='calendar-python-quickstart.json',
+                        sfname='client_secret.json')
+        if path == '':
+            csvpath = 'C:\\Users\\ivan.pernigo\\AppData\\Local\\PythonProject\\TTT\\marzo_2018.csv'
+        else:
+            csvpath = path
 
-        with open('C:\\Users\\ivan.pernigo\\AppData\\Local\\PythonProject\\TTT\\gen_2018.csv') as csvfile:
+        with open(csvpath) as csvfile:
             reader = csv.reader(csvfile, delimiter=';')
             for row in reader:
                 try:
@@ -28,7 +34,8 @@ class ImportCsv(object):
                     tt = time.strptime(row[4], "%H:%M")
                     end = data.replace(hour=tt.tm_hour, minute=tt.tm_min)
                     print('    OK ', start, '       ', end)
-                    evt.set_event(start, end, summary='pomeriggio')
+                    descr = row[11] + ';' + row[10] + ';' + row[9]
+                    evt.set_event(start, end, summary='pomeriggio', description=descr)
                 except ValueError:
                     print("")
 

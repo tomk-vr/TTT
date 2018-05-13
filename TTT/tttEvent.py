@@ -18,7 +18,7 @@ class TTTEvent(gevent.Event):
         http = self.credentials.authorize(httplib2.Http())
         self.service = discovery.build('calendar', 'v3', http=http)
 
-    def set_in(self, delta):
+    def set_in(self, delta, descr):
         now = datetime.datetime.now()
         now = now + datetime.timedelta(minutes=delta)
 
@@ -35,7 +35,7 @@ class TTTEvent(gevent.Event):
         else:
             sum = 'mattina'
 
-        self.set_event(now, now + datetime.timedelta(seconds=1), summary=sum)
+        self.set_event(now, now + datetime.timedelta(seconds=1), summary=sum, description=descr)
 
     def set_out(self, delta):
         now = datetime.datetime.now()
@@ -71,6 +71,10 @@ class TTTEvent(gevent.Event):
         start = datetime.datetime(year, month, calendar.monthrange(year, month)[1])
         end = datetime.datetime(year, month, calendar.monthrange(year, month)[1], 23, 59, 59)
         events = self.get_events(start=start, end=end)
+        if not events:
+            print("No tot hours event found")
+            return
+
         for event in events:
             if event['summary'] == "ORE MESE":
                 print ('{}   tot: {}'.format(calendar.month_name[month], event['description']))
