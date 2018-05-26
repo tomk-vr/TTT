@@ -34,10 +34,17 @@ class ImportCsv(object):
                     tt = time.strptime(row[4], "%H:%M")
                     end = data.replace(hour=tt.tm_hour, minute=tt.tm_min)
                     print('    OK ', start, '       ', end)
-                    descr = row[11] + ';' + row[10] + ';' + row[9]
+                    moreDict = {}
+                    if row[11] != '':
+                        moreDict['Trasferta'] = row[11]
+                        moreDict['Spese'] = row[10]
+                        moreDict['Pernotto'] = row[9]
+                        descr = str(moreDict)
+                    else:
+                        descr = ''
                     evt.set_event(start, end, summary='pomeriggio', description=descr)
                 except ValueError:
-                    print("")
+                    print("ImportCsv Error")
 
 
 
