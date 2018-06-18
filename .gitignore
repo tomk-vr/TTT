@@ -101,3 +101,5 @@ ENV/
 .mypy_cache/
 /TTT/client_secret.json
 /TTT/sheet_client_secret.json
+/TTTWeb/obj/Debug
+/TTTWeb/bin
