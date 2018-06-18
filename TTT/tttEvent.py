@@ -18,8 +18,10 @@ class TTTEvent(gevent.Event):
         http = self.credentials.authorize(httplib2.Http())
         self.service = discovery.build('calendar', 'v3', http=http)
 
-    def set_in(self, delta, descr):
-        now = datetime.datetime.now()
+    def set_in(self, delta, descr, now=None):
+        if now == None:
+            now = datetime.datetime.now()
+
         now = now + datetime.timedelta(minutes=delta)
 
         print ('TTTEvent.set_in ', now.strftime("%d/%m/%Y %H:%M:%S"))
@@ -37,8 +39,10 @@ class TTTEvent(gevent.Event):
 
         self.set_event(now, now + datetime.timedelta(seconds=1), summary=sum, description=descr)
 
-    def set_out(self, delta):
-        now = datetime.datetime.now()
+    def set_out(self, delta, now=None):
+        if now == None:
+            now = datetime.datetime.now()
+
         now = now + datetime.timedelta(minutes=delta)
 
         print ('TTTEvent.set_out ', now.strftime("%d/%m/%Y %H:%M:%S"))

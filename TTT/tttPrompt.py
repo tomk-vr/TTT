@@ -20,18 +20,52 @@ class tttPrompt(Cmd):
         print ("Hello, %s" % name)
 
     def do_in(self, args):
-        """set time of entry. Eg: in -1 set as time of entry datetime.now - 1 minutes"""
+        """Set time of entry. Eg: in -1 set as time of entry datetime.now - 1 minutes"""
         evt = tttEvent.TTTEvent(scope='https://www.googleapis.com/auth/calendar',
                                 cfname='calendar-python-quickstart.json',
                                 sfname='client_secret.json')
         evt.set_in(int(args), "")
 
+    def do_inf(self, args):
+        """Set time of entry. Eg: inf 05/06/2018 08:13 set time of entry for June 05"""
+        argstuple = tuple(map(str, args.split()))
+        if len(argstuple) == 2:
+            descr = ""
+        elif len(argstuple) == 4:
+            descr = "'Trasferta':'{}', 'Spese':'{}', 'Pernotto':'{}'".format(argstuple[2], argstuple[3], 0)
+            descr = "{" + descr + "}"
+        elif len(argstuple) == 5:
+            descr = "'Trasferta':'{}', 'Spese':'{}', 'Pernotto':'{}'".format(argstuple[2], argstuple[3], argstuple[4])
+            descr = "{" + descr + "}"
+        else:
+            print("Invalid args")
+            return
+
+        day = data = datetime.datetime.strptime(argstuple[0] + " " + argstuple[1], "%d/%m/%Y %H:%M")
+        evt = tttEvent.TTTEvent(scope='https://www.googleapis.com/auth/calendar',
+                        cfname='calendar-python-quickstart.json',
+                        sfname='client_secret.json')
+        evt.set_in(0, descr, day)
+
     def do_out(self, args):
-        """set exit time. Eg: out -1 set as exit datetime.now - 1 minutes"""
+        """Set exit time. Eg: out -1 set as exit datetime.now - 1 minutes"""
         evt = tttEvent.TTTEvent(scope='https://www.googleapis.com/auth/calendar',
                                 cfname='calendar-python-quickstart.json',
                                 sfname='client_secret.json')
         evt.set_out(int(args))
+
+    def do_outf(self, args):
+        """Set exit time. Eg: outf 05/06/2018 13:07 set exit time for June 05"""
+        argstuple = tuple(map(str, args.split()))
+        if len(argstuple) < 2:
+            print("Invalid args")
+            return
+
+        day = data = datetime.datetime.strptime(argstuple[0] + " " + argstuple[1], "%d/%m/%Y %H:%M")
+        evt = tttEvent.TTTEvent(scope='https://www.googleapis.com/auth/calendar',
+                        cfname='calendar-python-quickstart.json',
+                        sfname='client_secret.json')
+        evt.set_out(0, day)
 
     def do_print(self, args):
         """Print time tracking of given month. Eg: print 3 return march time track"""
