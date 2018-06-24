@@ -49,11 +49,15 @@
     <Folder Include="app\static\app\content\" />
     <Folder Include="app\static\app\fonts\" />
     <Folder Include="app\static\app\scripts\" />
+    <Folder Include="app\static\media\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="TTTWeb\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\media\alien-face-green.png" />
+    <Content Include="app\static\media\logo ip.jpg" />
+    <Content Include="app\templates\app\track.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

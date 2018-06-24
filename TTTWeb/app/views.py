@@ -44,3 +44,17 @@ def about(request):
             'year':datetime.now().year,
         }
     )
+
+def track(request):
+    """Renders the home page."""
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/track.html',
+        {
+            'title':'Time tracking',
+            'year':datetime.now().year,
+            'now':datetime.now().strftime("%H:%M"),
+            'day':datetime.now().strftime("%d/%m/%Y"),
+        }
+    )

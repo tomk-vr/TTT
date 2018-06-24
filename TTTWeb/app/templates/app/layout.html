@@ -18,12 +18,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
                 <a href="/" class="navbar-brand">Application name</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'track' %}">Track</a></li>
                     <li><a href="{% url 'about' %}">About</a></li>
                     <li><a href="{% url 'contact' %}">Contact</a></li>
                 </ul>
@@ -36,7 +38,8 @@
 {% block content %}{% endblock %}
         <hr/>
         <footer>
-            <p>&copy; {{ year }} - My Django Application</p>
+            <span><img src="{% static "media/logo ip.jpg" %}" alt="My image" width="15%"/></span>
+            <span style="float: right">&copy; {{ year }} - tomk</span>
         </footer>
     </div>
 
