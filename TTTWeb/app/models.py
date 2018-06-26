@@ -3,12 +3,13 @@ Definition of models.
 """
 
 from django.db import models
+import datetime
 
 class DayTime(models.Model):
     """A day time object for use in the application views and repository."""
-    day = models.DateField('date time')
-    totH = models.FloatField('day tot hour presence')
-    offH = models.FloatField('day tot hour off')
+    day = models.DateField('date time', default=datetime.date.today)
+    totH = models.FloatField('day tot hour presence', default=0.0)
+    offH = models.FloatField('day tot hour off', default=0.0)
     travel = models.CharField(max_length=50)
     travel_cost = models.IntegerField('business travel cost', default=0)
     overnigth_cost = models.IntegerField('business travel overnigth cost', default=0)

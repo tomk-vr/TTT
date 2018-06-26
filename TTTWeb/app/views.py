@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
+from .forms import PostDayTime
 
 def home(request):
     """Renders the home page."""
@@ -45,16 +46,28 @@ def about(request):
         }
     )
 
-def track(request):
-    """Renders the home page."""
+def dtform(request):
+    """Renders the day time form page."""
     assert isinstance(request, HttpRequest)
+
+    if request.method == "POST":
+        model = PostDayTime(request.POST)
+        if model.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        model = PostDayTime()
+    
     return render(
         request,
-        'app/track.html',
+        'app/dtform.html',
         {
-            'title':'Time tracking',
+            'title':'Day time form',
             'year':datetime.now().year,
             'now':datetime.now().strftime("%H:%M"),
             'day':datetime.now().strftime("%d/%m/%Y"),
+            'model': model,
         }
     )
+

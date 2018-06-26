@@ -57,7 +57,7 @@
   <ItemGroup>
     <Content Include="app\static\media\alien-face-green.png" />
     <Content Include="app\static\media\logo ip.jpg" />
-    <Content Include="app\templates\app\track.html" />
+    <Content Include="app\templates\app\dtform.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

@@ -1,0 +1,28 @@
+﻿{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <h1>{{day}}</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ model.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+    <div class="row">
+        <p>{{day}}  {{model.inm}} - {{model.outm}} --- {{model.ina}} - {{model.outa}}</p>
+        <!--div class="col-md-4">
+            <h2>In</h2>
+            <label class="lead">Input entry time:</label>
+            <input type="time" id="appt-time" name="appt-time" min="7:00" max="20:00" value="{{ now }}" required />
+            <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Save</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Out</h2>
+            <label class="lead">Input exit time:</label>
+            <input type="time" id="appt-time" name="appt-time" min="7:00" max="20:00" value="{{ now }}" required />
+            <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Save</a></p>
+        </div-->
+    </div>
+</div>
+
+{% endblock %}
