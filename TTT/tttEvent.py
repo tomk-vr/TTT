@@ -178,7 +178,7 @@ class TTTEvent(gevent.Event):
             if startdt.strftime("%d/%m/%Y") == prevdt:
                 hday += span.total_seconds()
                 hh = hday/3600
-                hm = math.floor(hh*4)/4
+                hm = math.floor(round(hh*4, 1))/4
                 hours += hm
                 evt[1] = str(hm)
                 if 'Trasferta' in moreDict:
@@ -209,18 +209,27 @@ class TTTEvent(gevent.Event):
                 pevents[startdt.day] = evt
                 hday = 0.0
             else:
-                if hday != 0.0:
-                    hours += hm
-                    if 'Trasferta' in moreDict:
-                        evt[3] = moreDict['Trasferta']
-                    if 'Spese' in moreDict:
+                if 'Trasferta' in moreDict:
+                    evt[3] = moreDict['Trasferta']
+                if 'Spese' in moreDict:
+                    if mode == 'mox':
+                        evt[4] = int(moreDict['Spese'])
+                        totexpense += evt[4]
+                    else:
                         if int(moreDict['Spese']) < 120:
                             evt[4] = 'NP'
                         else:
                             evt[4] = 'P'
-                    if 'Pernotto' in moreDict:
-                        if int(moreDict['Pernotto']) > 0:
+                if 'Pernotto' in moreDict:
+                    if int(moreDict['Pernotto']) > 0:
+                        if mode == 'mox':
+                            evt[5] = int(moreDict['Pernotto'])
+                            totexpense += evt[5]
+                        else:
                             evt[5] = 'X'
+
+                if hday != 0.0:
+                    hours += hm
                     pevents[startdt.day] = evt
                     if hm - 8 < 0:
                         evt[2] = 8 - hm
