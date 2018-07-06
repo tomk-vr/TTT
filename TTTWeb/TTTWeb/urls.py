@@ -17,6 +17,7 @@ urlpatterns = [
     # Examples:
     url(r'^$', app.views.home, name='home'),
     url(r'^dtform$', app.views.dtform, name='dtform'),
+    url(r'^timesheet$', app.views.timesheet, name='timesheet'),
     url(r'^contact$', app.views.contact, name='contact'),
     url(r'^about', app.views.about, name='about'),
     url(r'^login/$',

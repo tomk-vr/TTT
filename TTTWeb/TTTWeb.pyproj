@@ -6,6 +6,7 @@
     <RootNamespace>TTTWeb</RootNamespace>
     <InterpreterId>{6e08b891-f2ec-447f-aeb2-b4e8ac27047e}</InterpreterId>
     <InterpreterVersion>3.5</InterpreterVersion>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -17,7 +18,7 @@
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
-    <LaunchProvider>Django launcher</LaunchProvider>
+    <LaunchProvider>Web launcher</LaunchProvider>
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -31,6 +32,9 @@
   <ItemGroup>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
+    <Compile Include="app\MonthYearWidget.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
@@ -57,6 +61,7 @@
   <ItemGroup>
     <Content Include="app\static\media\alien-face-green.png" />
     <Content Include="app\static\media\logo ip.jpg" />
+    <Content Include="app\templates\app\timesheet.html" />
     <Content Include="app\templates\app\dtform.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />

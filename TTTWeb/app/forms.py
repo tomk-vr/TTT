@@ -6,6 +6,8 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from .models import DayTime
+import datetime
+from .MonthYearWidget import MonthYearWidget
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -22,4 +24,16 @@ class PostDayTime(forms.ModelForm):
 
     class Meta:
         model = DayTime
-        fields = ('inM', 'outM', 'inA', 'outA')
+        fields = ('inM', 'outM', 'inA', 'outA', 'travel', 'travel_cost', 'overnigth_cost')
+        widgets = {
+            'inM': forms.TimeInput(attrs={'class': 'inM'}, format='%H:%M'),
+            'outM': forms.TimeInput(attrs={'class': 'outM'}, format='%H:%M'),
+            'inA': forms.TimeInput(attrs={'class': 'inA'}, format='%H:%M'),
+            'outA': forms.TimeInput(attrs={'class': 'outA'}, format='%H:%M'),
+        }
+
+class PostDate(forms.Form):
+    date = forms.DateField(
+        required=False,
+        widget=MonthYearWidget(years=range(2017,2035))
+    )

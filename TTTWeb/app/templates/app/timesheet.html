@@ -1,0 +1,22 @@
+﻿{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <form method="POST">
+        {% csrf_token %}
+        <table class="lead">{{ form.as_table }}</table>
+        <button type="submit" class="btn btn-primary btn-large">View</button>
+    </form>
+</div>
+
+<table class="table table-condensed table-bordered">
+{% for q in queryset %}
+  <tr>
+     <td>{{ q.day }}</td>
+     <td>{{ q.totH }}</td>
+  </tr>
+{% endfor %}
+</table>
+
+{% endblock %}
