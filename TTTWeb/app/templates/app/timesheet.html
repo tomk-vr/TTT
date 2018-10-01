@@ -4,18 +4,56 @@
 
 <div class="jumbotron">
     <form method="POST">
-        {% csrf_token %}
-        <table class="lead">{{ form.as_table }}</table>
-        <button type="submit" class="btn btn-primary btn-large">View</button>
+        <div class="row">
+            <div class="col-md-4">
+                {% csrf_token %}
+                {{ form.as_p }}
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary btn-large">View</button>
+            </div>
+        </div>
     </form>
 </div>
 
-<table class="table table-condensed table-bordered">
+<table class="timesheet">
+    <tr>
+        <th>Day</th>
+        <th>Hours</th>
+        <th>Off</th>
+        <th>Travel</th>
+        <th>Cost</th>
+        <th>Overnigth cost</th>
+        <th>In</th>
+        <th>Out</th>
+        <th>In</th>
+        <th>Out</th>
+    </tr>
 {% for q in queryset %}
-  <tr>
-     <td>{{ q.day }}</td>
-     <td>{{ q.totH }}</td>
-  </tr>
+    <tr class="{% if q.hol %}red{% endif %}">
+        <td>{{ q.day|date:"d" }}</td>
+        <td>{{ q.totH }}</td>
+        {% if q.offH > 0 %}
+            <td>{{ q.offH }}</td>
+        {% else %}
+            <td></td>
+        {% endif %}
+        <td>{{ q.travel }}</td>
+        {% if q.travel_cost > 0 %}
+            <td>{{ q.travel_cost }}</td>
+        {% else %}
+            <td></td>
+        {% endif %}
+        {% if q.overnigth_cost > 0 %}
+            <td>{{ q.overnigth_cost }}</td>
+        {% else %}
+            <td></td>
+        {% endif %}        
+        <td>{{ q.inM |date:"H:i"}}</td>
+        <td>{{ q.outM |date:"H:i"}}</td>
+        <td>{{ q.inA |date:"H:i"}}</td>
+        <td>{{ q.outA |date:"H:i"}}</td>
+    </tr>
 {% endfor %}
 </table>
 

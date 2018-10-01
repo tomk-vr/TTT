@@ -9,6 +9,7 @@ import datetime
 from .forms import PostDayTime, PostDate
 from .models import DayTime
 import calendar
+from .DBYearDate import DBYearDate
 
 def home(request):
     """Renders the home page."""
@@ -62,6 +63,9 @@ def dtform(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.totH = post.calc_totH()
+            off = 8 - post.totH
+            if off > 0:
+                post.offH = off
             post.save()
     else:
         form = PostDayTime(instance=dt)
@@ -85,6 +89,14 @@ def timesheet(request):
         form = PostDate(request.POST)
         if form.is_valid():
             date = form.cleaned_data['date']
+            
+            if DayTime.objects.filter(day__gte=date).count() <= 0:
+                # fillDB
+                fdb = DBYearDate(scope='https://www.googleapis.com/auth/calendar',
+                                 cfname='calendar-python-quickstart.json',
+                                 sfname='client_secret.json')
+                fdb.fillDB(date.year, True)
+
             lday = calendar.monthrange(date.year, date.month)[1]
             lastday = date.replace(day=lday) 
             qs = DayTime.objects.filter(day__gte=date).filter(day__lte=lastday)

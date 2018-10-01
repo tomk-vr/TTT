@@ -153,7 +153,10 @@ class TTTEvent(gevent.Event):
 
         retevts = []
         pevents = {}
-        evt = []
+        if mode == 'blm':
+            evt = ['', '', '', '', '', '', '', '']
+        else:
+            evt = ['', '', '', '', '', '']
         prevdt = ''
         hday = 0.0
         hours = 0.0
@@ -163,11 +166,12 @@ class TTTEvent(gevent.Event):
         moreDict = {}
         totexpense = 0
         for event in events:
+
             if event['summary'] == "ORE MESE":
                 continue
             startdt = parse(event['start']['dateTime'])
             enddt = parse(event['end']['dateTime'])
-            span = enddt - startdt
+            span = enddt.replace(second=59) - startdt.replace(second=59)
             month = startdt.month
             year = startdt.year
             
@@ -185,17 +189,17 @@ class TTTEvent(gevent.Event):
                     evt[3] = moreDict['Trasferta']
                 if 'Spese' in moreDict:
                     if mode == 'mox':
-                        evt[4] = int(moreDict['Spese'])
+                        evt[4] = float(moreDict['Spese'].replace(',', '.'))
                         totexpense += evt[4]
                     else:
-                        if int(moreDict['Spese']) < 120:
+                        if float(moreDict['Spese'].replace(',', '.')) == 70:
                             evt[4] = 'NP'
-                        else:
+                        if float(moreDict['Spese'].replace(',', '.')) == 120:
                             evt[4] = 'P'
                 if 'Pernotto' in moreDict:
-                    if int(moreDict['Pernotto']) > 0:
+                    if float(moreDict['Pernotto'].replace(',', '.')) > 0:
                         if mode == 'mox':
-                            evt[5] = int(moreDict['Pernotto'])
+                            evt[5] = float(moreDict['Pernotto'].replace(',', '.'))
                             totexpense += evt[5]
                         else:
                             evt[5] = 'X'
@@ -209,24 +213,31 @@ class TTTEvent(gevent.Event):
                 pevents[startdt.day] = evt
                 hday = 0.0
             else:
+                if mode == 'blm':
+                    evt = ['', '', '', '', '', '', '', '']
+                else:
+                    evt = ['', '', '', '', '', '']
                 if 'Trasferta' in moreDict:
                     evt[3] = moreDict['Trasferta']
                 if 'Spese' in moreDict:
                     if mode == 'mox':
-                        evt[4] = int(moreDict['Spese'])
+                        evt[4] = float(moreDict['Spese'].replace(',', '.'))
                         totexpense += evt[4]
                     else:
-                        if int(moreDict['Spese']) < 120:
-                            evt[4] = 'NP'
-                        else:
-                            evt[4] = 'P'
+                        if float(moreDict['Spese'].replace(',', '.')) == 70:
+                            if evt[3] != '':
+                                evt[4] = 'NP'
+                        elif float(moreDict['Spese'].replace(',', '.')) == 120:
+                            if evt[3] != '':
+                                evt[4] = 'P'
                 if 'Pernotto' in moreDict:
-                    if int(moreDict['Pernotto']) > 0:
-                        if mode == 'mox':
-                            evt[5] = int(moreDict['Pernotto'])
-                            totexpense += evt[5]
-                        else:
-                            evt[5] = 'X'
+                    if evt[3] != '':
+                        if float(moreDict['Pernotto'].replace(',', '.')) > 0:
+                            if mode == 'mox':
+                                evt[5] = float(moreDict['Pernotto'].replace(',', '.'))
+                                totexpense += evt[5]
+                            else:
+                                evt[5] = 'X'
 
                 if hday != 0.0:
                     hours += hm
@@ -240,9 +251,13 @@ class TTTEvent(gevent.Event):
                 hm = math.floor(hh*4)/4
                 prevdt = startdt.strftime("%d/%m/%Y")
                 if mode == 'mox': 
-                    evt = [startdt.day, str(hm), '', '', '', '']
+                    evt[0] = startdt.day
+                    evt[1] = str(hm)
                 else:
-                    evt = [startdt.day, str(hm), '', '', '', '', startdt.strftime("%H:%M"), enddt.strftime("%H:%M")]
+                    evt[0] = startdt.day
+                    evt[1] = str(hm)
+                    evt[6] = startdt.strftime("%H:%M")
+                    evt[7] = enddt.strftime("%H:%M")
                 moreDict = {}
 
         if hday != 0.0 and len(events) == 1:
@@ -250,13 +265,24 @@ class TTTEvent(gevent.Event):
             if 'Trasferta' in moreDict:
                 evt[3] = moreDict['Trasferta']
             if 'Spese' in moreDict:
-                if int(moreDict['Spese']) < 120:
-                    evt[4] = 'NP'
+                if mode == 'mox':
+                    evt[4] = float(moreDict['Spese'].replace(',', '.'))
+                    totexpense += evt[4]
                 else:
-                    evt[4] = 'P'
-            if 'Pernotto' in moreDict:
-                if int(moreDict['Pernotto']) > 0:
-                    evt[5] = 'X'
+                    if float(moreDict['Spese'].replace(',', '.')) == 70:
+                        if evt[3] != '':
+                            evt[4] = 'NP'
+                    if float(moreDict['Spese'].replace(',', '.')) == 120:
+                        if evt[3] != '':
+                            evt[4] = 'P'
+                    if float(moreDict['Pernotto'].replace(',', '.')) > 0:
+                        if evt[3] != '':
+                            if mode == 'mox':
+                                evt[5] = float(moreDict['Pernotto'].replace(',', '.'))
+                                totexpense += evt[5]
+                            else:
+                                evt[5] = 'X'
+
             pevents[startdt.day] = evt
             if hm - 8 < 0:
                 evt[2] = 8 - hm

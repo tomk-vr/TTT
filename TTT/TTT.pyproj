@@ -13,6 +13,8 @@
     <Name>TTT</Name>
     <RootNamespace>TTT</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>{4af16b0f-6e8a-45df-bdda-9d3ea7f6fcfe}</InterpreterId>
+    <InterpreterVersion>3.5</InterpreterVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,12 +40,6 @@
     <Compile Include="pdfWriter.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="serialize.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="statistics.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TTT.py" />
     <Compile Include="tttEvent.py">
       <SubType>Code</SubType>
@@ -54,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Imported lib.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{4af16b0f-6e8a-45df-bdda-9d3ea7f6fcfe}\3.5" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

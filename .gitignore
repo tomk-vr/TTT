@@ -103,3 +103,4 @@ ENV/
 /TTT/sheet_client_secret.json
 /TTTWeb/obj/Debug
 /TTTWeb/bin
+/TTTWeb/app/client_secret.json

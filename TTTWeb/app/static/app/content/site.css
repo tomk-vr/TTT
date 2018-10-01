@@ -40,3 +40,29 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+
+timesheet {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.timesheet td, .timesheet th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+/*.timesheet tr:nth-child(even){background-color: #f2f2f2;}*/
+
+.timesheet tr:hover {background-color: #ddd;}
+
+.timesheet tr.red {background-color:indianred}
+
+.timesheet th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #428bca;
+    color: white;
+}

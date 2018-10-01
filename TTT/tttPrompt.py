@@ -84,7 +84,7 @@ class tttPrompt(Cmd):
         """Set tot hour in month event.
         Eg: seth 3, calculate tot hour in march and set it in a calendar event
             seth 3 2018 167.75, set tot hour in march to value 167.75"""
-        today = datetime.datetime.now
+        today = datetime.datetime.now()
         argstuple = tuple(map(str, args.split()))
         if len(argstuple) == 0:
             month = today.month - 1

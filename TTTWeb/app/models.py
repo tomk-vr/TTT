@@ -18,6 +18,7 @@ class DayTime(models.Model):
     outM = models.TimeField('out:', default='00:00')
     inA = models.TimeField('in:', default='00:00')
     outA = models.TimeField('out:', default='00:00')
+    hol = models.BooleanField('hol:', default=False)
 
     def calc_totH(self):
         """Calculates the day total hour presence."""
