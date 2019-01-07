@@ -1,4 +1,5 @@
 from __future__ import print_function
+import os
 import tttEvent
 import datetime
 import importCsv
@@ -178,26 +179,54 @@ class tttPrompt(Cmd):
 
     def do_bill(self, args):
         """Create bill pdf. Eg: bill 3"""
+        self.billo(args)
+        self.billo(args + " mb")
+
+    def billo(self, args):
         today = datetime.datetime.now()
         locale.setlocale(locale.LC_TIME, "it")
         argstuple = tuple(map(str, args.split()))
+        mbargs = ""
         if len(argstuple) == 0:
             month = today.month - 1
-            year = str(today.year)
+            if month == 12:
+                year = str(today.year -1)
+            else:
+                year = str(today.year)
         elif len(argstuple) == 1:
-            month = int(args)
-            year = str(today.year)
-        else:
-            month = int(argstuple[0])
-            year = argstuple[1]
+            if argstuple[0] == "mb":
+                mbargs = "mb"
+                month = today.month - 1
+                if month == 12:
+                    year = str(today.year -1)
+                else:
+                    year = str(today.year)
+            else:
+                month = int(args)
+                if month == 12:
+                    year = str(today.year -1)
+                else:
+                    year = str(today.year)
+        elif len(argstuple) == 2:
+                month = int(argstuple[0])
+                if month == 12:
+                    year = str(today.year -1)
+                else:
+                    year = str(today.year)
 
-        num = month + 1
-        name = r"c:\mox\\" + str(num) + "_" + year + ".pdf"
+                if argstuple[1] == "mb":
+                    mbargs = "mb"
+                else:
+                    year = argstuple[1]
+            
+
+        num = today.month
+        name = r"c:\mox\\" + str(num) + "_" + str(today.year) + ".pdf"
         evt = tttEvent.TTTEvent(scope='https://www.googleapis.com/auth/calendar',
                     cfname='calendar-python-quickstart.json',
                     sfname='client_secret.json')
 
-        events = evt.get_events(month=month)
+        events = evt.get_events(month=month, year=int(year))
         ret = evt.get_data(events, 'mox')
         totHevt = evt.get_totHoursEvents(month, year, events)
         totH = float(totHevt['description'])
@@ -234,32 +263,43 @@ class tttPrompt(Cmd):
         totCostH = costH*totH
         totPay = totCostH+totExp
         in4perc = (totCostH+totExp)*4/100
-        impIVA = totPay + in4perc
-        iva = impIVA*22/100 
-        totBill = impIVA + iva
-        rit20per = -totPay*20/100
-        tab = [['Fattura n.' + str(num) + '/' + year,'','Ore', 'Onoranze'],
+        #impIVA = totPay + in4perc
+        #iva = impIVA*22/100 
+        totBill = totPay + in4perc
+        #rit20per = -totPay*20/100
+        tab = [['Fattura n.' + str(num) + '/' + str(today.year),'','Ore', 'Onoranze'],
                ['Accordo contrattuale n. 1801', '', totH, "%.2f" % (totCostH)],
                ['Spese per trasferte', '','', "%.2f" % (totExp)],
                ['Totale compensi', '', '', "%.2f" % (totPay)],
                ['Contributo integrativo Inarcassa  4%', '', '', "%.2f" % (in4perc)],
-               ['Imponibile Iva', '', '', "%.2f" % (impIVA)],
-               ['Iva 22%', '', '', "%.2f" % (iva)],
+               #['Imponibile Iva', '', '', "%.2f" % (impIVA)],
+               #['Iva 22%', '', '', "%.2f" % (iva)],
                ['Totale fattura','','', "%.2f" % (totBill)],
-               ['Ritenuta irpef 20% su totale compensi', '', '', "%.2f" % (rit20per)],
-               ['Netto da pagare', '', '', "%.2f" % (totBill+rit20per)]]
+               #['Ritenuta irpef 20% su totale compensi', '', '', "%.2f" % (rit20per)],
+               #['Netto da pagare', '', '', "%.2f" % (totBill+rit20per)]
+              ]
 
         pdfw.write_table(tab, False)
         pdfw.write_header('')
         pdfw.write_header('')
         pdfw.write_header('')
+        pdfw.write_header('Operazione senza applicazione dell\'IVA ai sensi dell\'art.1, comma 58, Legge n.190/2014', 'Normal', alignment='l')
         pdfw.write_header('')
+        pdfw.write_header('Operazione senza applicazione della ritenuta alla fonte a titolo di acconto ai sensi dell\'art.1, comma 67, Legge n.190/2014', 'Normal', alignment='l')
         pdfw.write_header('')
         pdfw.write_header('')
         pdfw.write_header('Termine di pagamento: 30gg. d.f.f.m.', 'Normal', alignment='l')
         pdfw.write_header('L’importo della presente fattura potrà anche essere pagato mediante bonifico bancario sul c/c n. 000005348814 intestato a Ivan Pernigo c/o Unicredit Banca, agenzia Verona Scuderlando ABI 02008 CAB 11727 CIN “P” – IBAN IT 25 P 02008 11727 000005348814.', 'Normal', alignment='l')
+
+        if mbargs == "mb":
+            pdfw.write_header('')
+            pdfw.write_header('')
+            pdfw.write_header('Marca da bollo assolta sull\'originale', 'Normal', alignment='l')
+            nname = r"c:\mox\\__" + str(num) + "_" + str(today.year) + ".pdf"
+            os.rename(name, nname)
+       
         pdfw.build()
-        print("Tot. fattura: %.2f" % (totBill+rit20per) + ' €')
+        print("Tot. fattura: %.2f" % (totBill) + ' €')
 
     def do_quit(self, args):
         """Quits TTT."""
