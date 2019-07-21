@@ -11,6 +11,8 @@ import app.views
 
 from django.conf.urls import include
 from django.contrib import admin
+from django.views.generic.base import RedirectView
+
 admin.autodiscover()
 
 urlpatterns = [
@@ -41,4 +43,5 @@ urlpatterns = [
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/media/favicon.ico')),
 ]

@@ -24,8 +24,9 @@ class PostDayTime(forms.ModelForm):
 
     class Meta:
         model = DayTime
-        fields = ('inM', 'outM', 'inA', 'outA', 'travel', 'travel_cost', 'overnigth_cost')
+        fields = ('day', 'inM', 'outM', 'inA', 'outA', 'travel', 'travel_cost', 'overnigth_cost')
         widgets = {
+            'day': forms.DateInput(attrs={'class': 'day'}, format='%Y-%m-%d'),
             'inM': forms.TimeInput(attrs={'class': 'inM'}, format='%H:%M'),
             'outM': forms.TimeInput(attrs={'class': 'outM'}, format='%H:%M'),
             'inA': forms.TimeInput(attrs={'class': 'inA'}, format='%H:%M'),
@@ -34,6 +35,7 @@ class PostDayTime(forms.ModelForm):
 
 class PostDate(forms.Form):
     date = forms.DateField(
+        initial=datetime.date.today,
         required=False,
-        widget=MonthYearWidget(years=range(2017,2035))
+        widget=MonthYearWidget(years=range(2017,2035)),
     )

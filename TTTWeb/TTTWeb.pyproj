@@ -4,8 +4,10 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>TTTWeb</Name>
     <RootNamespace>TTTWeb</RootNamespace>
-    <InterpreterId>{6e08b891-f2ec-447f-aeb2-b4e8ac27047e}</InterpreterId>
-    <InterpreterVersion>3.5</InterpreterVersion>
+    <InterpreterId>
+    </InterpreterId>
+    <InterpreterVersion>
+    </InterpreterVersion>
     <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup>
@@ -36,6 +38,9 @@
     <Compile Include="app\forms.py" />
     <Compile Include="app\gcred.py" />
     <Compile Include="app\models.py" />
+    <Compile Include="app\pdfWriter.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\MonthYearWidget.py">
       <SubType>Code</SubType>
     </Compile>
@@ -102,20 +107,6 @@
     <None Include="readme.mht">
       <SubType>WebBrowser</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Interpreter Include="env\">
-      <Id>{6e08b891-f2ec-447f-aeb2-b4e8ac27047e}</Id>
-      <BaseInterpreter>{c63a3cae-4076-4984-aa44-7e5979b9262f}</BaseInterpreter>
-      <Version>3.5</Version>
-      <Description>env (Python 3.6 -x64)</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <LibraryPath>Lib\</LibraryPath>
-      <PathEnvironmentVariable>
-      </PathEnvironmentVariable>
-      <Architecture>Amd64</Architecture>
-    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

@@ -3,7 +3,6 @@
 {% block content %}
 
 <div class="jumbotron">
-    <h1>{{day}}</h1>
     <form method="POST">
         {% csrf_token %}
         <table class="lead">{{ form.as_table }}</table>
@@ -11,7 +10,7 @@
     </form>
 </div>
 
-<p class="lead">{{day}} &emsp; {{daytime.inM|date:"H:i"}} - {{daytime.outM|date:"H:i"}} &emsp; {{daytime.inA|date:"H:i"}} - {{daytime.outA|date:"H:i"}} &emsp; {{daytime.totH}}</p>
+<p class="lead">{{daytime.day|date:"d/m/Y"}} &emsp; {{daytime.inM|date:"H:i"}} - {{daytime.outM|date:"H:i"}} &emsp; {{daytime.inA|date:"H:i"}} - {{daytime.outA|date:"H:i"}} &emsp; {{daytime.totH}}  ({{daytime.decimaltotH}})</p>
 
 <div class="row">
     <!--div class="col-md-4">

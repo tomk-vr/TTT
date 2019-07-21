@@ -59,6 +59,8 @@ timesheet {
 
 .timesheet tr.red {background-color:indianred}
 
+.timesheet td.green {background-color:forestgreen}
+
 .timesheet th {
     padding-top: 12px;
     padding-bottom: 12px;

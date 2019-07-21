@@ -10,7 +10,8 @@
                 {{ form.as_p }}
             </div>
             <div class="col-md-4">
-                <button type="submit" class="btn btn-primary btn-large">View</button>
+                <button type="submit" name="View" class="btn btn-primary btn-large">View</button>
+                <button type="submit" name="Print" class="btn btn-primary btn-large">Print</button>
             </div>
         </div>
     </form>
@@ -32,7 +33,7 @@
 {% for q in queryset %}
     <tr class="{% if q.hol %}red{% endif %}">
         <td>{{ q.day|date:"d" }}</td>
-        <td>{{ q.totH }}</td>
+        <td class="{% if q.totH > 0 %}green{% endif %}">{{ q.totH }}</td>
         {% if q.offH > 0 %}
             <td>{{ q.offH }}</td>
         {% else %}
@@ -55,6 +56,18 @@
         <td>{{ q.outA |date:"H:i"}}</td>
     </tr>
 {% endfor %}
+    <tr>
+        <th>Tot:</th>
+        <th>{{monthTotH}}</th>
+        <th>Off</th>
+        <th>Travel</th>
+        <th>Cost</th>
+        <th>Overnigth cost</th>
+        <th>In</th>
+        <th>Out</th>
+        <th>In</th>
+        <th>Out</th>
+    </tr>
 </table>
 
 {% endblock %}
