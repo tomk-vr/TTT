@@ -9,7 +9,7 @@
                 {% csrf_token %}
                 {{ form.as_p }}
             </div>
-            <div class="col-md-4">
+            <div class="btn-group btn-group-lg">
                 <button type="submit" name="View" class="btn btn-primary btn-large">View</button>
                 <button type="submit" name="Print" class="btn btn-primary btn-large">Print</button>
             </div>
@@ -17,57 +17,89 @@
     </form>
 </div>
 
-<table class="timesheet">
-    <tr>
-        <th>Day</th>
-        <th>Hours</th>
-        <th>Off</th>
-        <th>Travel</th>
-        <th>Cost</th>
-        <th>Overnigth cost</th>
-        <th>In</th>
-        <th>Out</th>
-        <th>In</th>
-        <th>Out</th>
-    </tr>
-{% for q in queryset %}
-    <tr class="{% if q.hol %}red{% endif %}">
-        <td>{{ q.day|date:"d" }}</td>
-        <td class="{% if q.totH > 0 %}green{% endif %}">{{ q.totH }}</td>
-        {% if q.offH > 0 %}
-            <td>{{ q.offH }}</td>
-        {% else %}
-            <td></td>
-        {% endif %}
-        <td>{{ q.travel }}</td>
-        {% if q.travel_cost > 0 %}
-            <td>{{ q.travel_cost }}</td>
-        {% else %}
-            <td></td>
-        {% endif %}
-        {% if q.overnigth_cost > 0 %}
-            <td>{{ q.overnigth_cost }}</td>
-        {% else %}
-            <td></td>
-        {% endif %}        
-        <td>{{ q.inM |date:"H:i"}}</td>
-        <td>{{ q.outM |date:"H:i"}}</td>
-        <td>{{ q.inA |date:"H:i"}}</td>
-        <td>{{ q.outA |date:"H:i"}}</td>
-    </tr>
-{% endfor %}
-    <tr>
-        <th>Tot:</th>
-        <th>{{monthTotH}}</th>
-        <th>Off</th>
-        <th>Travel</th>
-        <th>Cost</th>
-        <th>Overnigth cost</th>
-        <th>In</th>
-        <th>Out</th>
-        <th>In</th>
-        <th>Out</th>
-    </tr>
-</table>
-
+<div>
+    <div class="row">
+        <div class="col-md-7">
+            <table class="timesheet">
+                <tr>
+                    <th>Day</th>
+                    <th>Hours</th>
+                    <th>Off</th>
+                    <th>Travel</th>
+                    <th>Cost</th>
+                    <th>Overnigth cost</th>
+                    <th>In</th>
+                    <th>Out</th>
+                    <th>In</th>
+                    <th>Out</th>
+                </tr>
+            {% for q in queryset %}
+                <tr class="{% if q.hol %}red{% endif %}">
+                    <td>{{ q.day|date:"d" }}</td>
+                    <td class="{% if q.totH > 0 %}green{% endif %}">{{ q.totH }}</td>
+                    {% if q.offH > 0 %}
+                        <td>{{ q.offH }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td>{{ q.travel }}</td>
+                    {% if q.travel_cost > 0 %}
+                        <td>{{ q.travel_cost }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if q.overnigth_cost > 0 %}
+                        <td>{{ q.overnigth_cost }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}        
+                    <td>{{ q.inM |date:"H:i"}}</td>
+                    <td>{{ q.outM |date:"H:i"}}</td>
+                    <td>{{ q.inA |date:"H:i"}}</td>
+                    <td>{{ q.outA |date:"H:i"}}</td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <th>Tot:</th>
+                    <th>{{monthTotH}}</th>
+                    <th>Off</th>
+                    <th>Travel</th>
+                    <th>{{travCost}}</th>
+                    <th>{{overnCost}}</th>
+                    <th>In</th>
+                    <th>Out</th>
+                    <th>In</th>
+                    <th>Out</th>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <div class="jumbotron">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="btn-group btn-group-lg">
+                                <button type="submit" name="ViewDay" class="btn btn-primary">View</button>
+                                <button type="submit" name="SaveDay" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row top-buffer-m">
+                        <div class="col-md-12">
+                            {% csrf_token %}
+                            <table class="lead">
+                                {{ dtform.as_table }}
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row top-buffer-l">
+                        <div class="col-md-12">
+                            <p class="h1"><strong>{{daytime.totH}}  ({{daytime.decimaltotH}})</strong></p>
+                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

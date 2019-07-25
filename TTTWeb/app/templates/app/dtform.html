@@ -4,28 +4,21 @@
 
 <div class="jumbotron">
     <form method="POST">
-        {% csrf_token %}
-        <table class="lead">{{ form.as_table }}</table>
-        <button type="submit" class="btn btn-primary btn-large">Save</button>
+        <div class="row">
+            <div class="col-md-4">
+                {% csrf_token %}
+                <table class="lead">{{ form.as_table }}</table>
+            </div>
+            <div class="col-md-4">
+                <div class="btn-group-vertical btn-group-lg">
+                    <button type="submit" name="View" class="btn btn-primary">View</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
 <p class="lead">{{daytime.day|date:"d/m/Y"}} &emsp; {{daytime.inM|date:"H:i"}} - {{daytime.outM|date:"H:i"}} &emsp; {{daytime.inA|date:"H:i"}} - {{daytime.outA|date:"H:i"}} &emsp; {{daytime.totH}}  ({{daytime.decimaltotH}})</p>
-
-<div class="row">
-    <!--div class="col-md-4">
-        <h2>In</h2>
-        <label class="lead">Input entry time:</label>
-        <input type="time" id="appt-time" name="appt-time" min="7:00" max="20:00" value="{{ now }}" required />
-        <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Save</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Out</h2>
-        <label class="lead">Input exit time:</label>
-        <input type="time" id="appt-time" name="appt-time" min="7:00" max="20:00" value="{{ now }}" required />
-        <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Save</a></p>
-    </div-->
-</div>
-
 
 {% endblock %}

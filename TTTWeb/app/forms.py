@@ -26,11 +26,14 @@ class PostDayTime(forms.ModelForm):
         model = DayTime
         fields = ('day', 'inM', 'outM', 'inA', 'outA', 'travel', 'travel_cost', 'overnigth_cost')
         widgets = {
-            'day': forms.DateInput(attrs={'class': 'day'}, format='%Y-%m-%d'),
-            'inM': forms.TimeInput(attrs={'class': 'inM'}, format='%H:%M'),
-            'outM': forms.TimeInput(attrs={'class': 'outM'}, format='%H:%M'),
-            'inA': forms.TimeInput(attrs={'class': 'inA'}, format='%H:%M'),
-            'outA': forms.TimeInput(attrs={'class': 'outA'}, format='%H:%M'),
+            'day': forms.DateInput(attrs={'class': 'day', 'size': 7}, format='%Y-%m-%d'),
+            'inM': forms.TimeInput(attrs={'class': 'inM', 'size': 7}, format='%H:%M'),
+            'outM': forms.TimeInput(attrs={'class': 'outM', 'size': 7}, format='%H:%M'),
+            'inA': forms.TimeInput(attrs={'class': 'inA', 'size': 7}, format='%H:%M'),
+            'outA': forms.TimeInput(attrs={'class': 'outA', 'size': 7}, format='%H:%M'),
+            'travel' : forms.TextInput(attrs={'size': 7}),
+            'travel_cost' : forms.TextInput(attrs={'size': 7}),
+            'overnigth_cost' : forms.TextInput(attrs={'size': 7}),
         }
 
 class PostDate(forms.Form):

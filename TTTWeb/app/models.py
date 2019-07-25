@@ -42,21 +42,5 @@ class DayTime(models.Model):
         self.totH = hm
         return hm
 
-    def total_hours(self):
-        """Calculates the month total hour presence."""
-        return self.choice_set.aggregate(Sum('totH'))['totHours']
-    
-    def total_off(self):
-        """Calculates the month total hour off."""
-        return self.choice_set.aggregate(Sum('offH'))['totOffHours']
-
-    def total_travCost(self):
-        """Calculates the total travel cost."""
-        return self.choice_set.aggregate(Sum('travel_cost'))['totTravCost']
-
-    def total_overCost(self):
-        """Calculates the total overnight cost."""
-        return self.choice_set.aggregate(Sum('overnigth_cost'))['totOverCost']
-
     def __str__(self):
         return self.day.strftime("%d/%m/%Y") + ' - ' + str(self.totH) + ' h'

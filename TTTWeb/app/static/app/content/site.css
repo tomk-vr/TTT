@@ -68,3 +68,6 @@ timesheet {
     background-color: #428bca;
     color: white;
 }
+
+.top-buffer-m { margin-top:20px; }
+.top-buffer-l { margin-top:40px; }

@@ -12,6 +12,7 @@ import calendar
 import locale
 from .DBYearDate import DBYearDate
 from .pdfWriter import pdfWriter
+from django.db.models import Sum
 import os
 
 def home(request):
@@ -64,14 +65,19 @@ def dtform(request):
     if request.method == "POST":
         form = PostDayTime(request.POST, instance=dt)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.totH = post.calc_totH()
-            off = 8 - post.totH
-            if off > 0:
-                post.offH = off
-            else:
-                post.offH = 0
-            post.save()
+            if 'View' in form.data:
+                day = request.POST.get('day')
+                dt = DayTime.objects.get(day=day)
+                form = PostDayTime(instance=dt)
+            else:    
+                post = form.save(commit=False)
+                post.totH = post.calc_totH()
+                off = 8 - post.totH
+                if off > 0:
+                    post.offH = off
+                else:
+                    post.offH = 0
+                post.save()
     else:
         form = PostDayTime(instance=dt)
     
@@ -83,7 +89,7 @@ def dtform(request):
             'year':datetime.datetime.now().year,
             'day':datetime.datetime.now().strftime("%d/%m/%Y"),
             'form':form,
-            'daytime':dt
+            'daytime':dt,
         }
     )
 
@@ -91,31 +97,42 @@ def timesheet(request):
     """Renders the timesheet page."""
     assert isinstance(request, HttpRequest)
     if request.method == "POST":
+        print(request.POST)
         form = PostDate(request.POST)
         if form.is_valid():
             date = form.cleaned_data['date']
             
-            if DayTime.objects.filter(day__gte=date).count() <= 0:
-                # fillDB
-                fdb = DBYearDate(scope='https://www.googleapis.com/auth/calendar',
-                                    cfname='calendar-python-quickstart.json',
-                                    sfname='client_secret.json')
-                fdb.fillDB(date.year, True)
+            qs = timesheetRequestHandler(date)
 
-            lday = calendar.monthrange(date.year, date.month)[1]
-            lastday = date.replace(day=lday) 
-            qs = DayTime.objects.filter(day__gte=date).filter(day__lte=lastday)
-            
-            """TODO monthTotH = """ 
-            monthTotH = 0.0
-
+            day = datetime.datetime.now()
+            if 'View' in form.data:
+                day = date.replace(day=1)
             if 'Print' in form.data:
-                print(date, qs)
+                day = date.replace(day=1)
+                createPdf(date, qs)
+            elif 'ViewDay' in form.data:
+                day = request.POST.get('day')
+
+            dt = qs.get(day=day.strftime("%Y-%m-%d"))
+            dtform = PostDayTime(instance=dt) 
+
+        else:
+            return
     else:
         form = PostDate()
         form.date = datetime.date.today()
-        qs = DayTime.objects.none()
-        monthTotH = 0.0
+        date = form.date.replace(day=1)
+        #print(date)
+        qs = timesheetRequestHandler(date)
+        
+        dt = qs.get(day=datetime.datetime.now().strftime("%Y-%m-%d"))
+        dtform = PostDayTime(instance=dt) 
+
+    su = qs.aggregate(Sum('totH'), Sum('travel_cost'), Sum('overnigth_cost'))
+    monthTotH = su['totH__sum']
+    travCost = su['travel_cost__sum']
+    overnCost = su['overnigth_cost__sum']
+
 
     return render(
         request,
@@ -125,10 +142,29 @@ def timesheet(request):
             'form':form,
             'queryset':qs,
             'monthTotH': monthTotH,
+            'travCost' : travCost,
+            'overnCost' : overnCost,
+            'dtform' :dtform,
+            'daytime':dt,
         }
     )
 
-def print(date, qs):
+def timesheetRequestHandler(date):
+    '''Create all year date empty'''
+    if DayTime.objects.filter(day__gte=date).count() <= 0:
+        # fillDB
+        fdb = DBYearDate(scope='https://www.googleapis.com/auth/calendar',
+                            cfname='calendar-python-quickstart.json',
+                            sfname='client_secret.json')
+        fdb.fillDB(date.year, True)
+
+    lday = calendar.monthrange(date.year, date.month)[1]
+    lastday = date.replace(day=lday) 
+    qs = DayTime.objects.filter(day__gte=date).filter(day__lte=lastday)
+    return qs            
+
+
+def createPdf(date, qs):
     
     locale.setlocale(locale.LC_TIME, "it")
     monthStr = calendar.month_name[date.month];
